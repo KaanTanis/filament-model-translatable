@@ -30,22 +30,29 @@ class FilamentModelTranslatableServiceProvider extends PackageServiceProvider
     {
         parent::boot();
 
+        // todo: fix repeater
+        // todo: check fileupload, select and other fields
+
         Field::macro('translatable', function () {
             $component = clone $this;
 
             $locales = config('filament-model-translatable.supported_locales', ['en']);
 
             $actions = collect($locales)->map(function ($locale) use ($component) {
+                $localizedComponent = clone $component;
+                
+                $localizedComponent->formatStateUsing(function ($model, $record, $component) use ($locale) {
+                    $key = $component->getName();
+                    $translation = FilamentModelTranslatable::getTranslate($model, $record->id, $key, $locale);
+
+                    return $translation ?? $record->{$key};
+                });
+
                 return Action::make($locale)
                     ->label(str($locale)->upper())
-                    ->form([
-                        $component->formatStateUsing(function ($model, $record, $component) use ($locale) {
-                            $key = $component->getName();
-                            $translation = FilamentModelTranslatable::getTranslate($model, $record->id, $key, $locale);
-
-                            return $translation ?? $record->{$key};
-                        }),
-                    ])->action(function ($model, $record, $data) use ($locale) {
+                    ->form([$localizedComponent])
+                    ->hidden(fn($record) => !$record)
+                    ->action(function ($model, $record, $data) use ($locale) {
                         $key = key($data);
                         $value = $data[$key];
 
@@ -55,5 +62,6 @@ class FilamentModelTranslatableServiceProvider extends PackageServiceProvider
 
             return $this->hintAction(fn () => $actions);
         });
+
     }
 }
