@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace KaanTanis\FilamentModelTranslatable\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class FilamentModelTranslatableCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'filament-model-translatable';
 
     public $description = 'My command';
 
