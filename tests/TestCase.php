@@ -3,8 +3,8 @@
 namespace KaanTanis\FilamentModelTranslatable\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Orchestra\Testbench\TestCase as Orchestra;
 use KaanTanis\FilamentModelTranslatable\FilamentModelTranslatableServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {

@@ -2,22 +2,15 @@
 
 namespace KaanTanis\FilamentModelTranslatable;
 
-use KaanTanis\FilamentModelTranslatable\Models\ModelTranslatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use KaanTanis\FilamentModelTranslatable\Models\ModelTranslatable;
 
-class FilamentModelTranslatable 
+class FilamentModelTranslatable
 {
     /**
      * Set the translation for a model.
-     *
-     * @param  string  $modelClass
-     * @param  int     $id
-     * @param  string  $key
-     * @param  string  $value
-     * @param  string  $locale
-     * @return bool
      */
     public function setTranslate(string $modelClass, int $id, string $key, string $value, string $locale): bool
     {
@@ -39,18 +32,13 @@ class FilamentModelTranslatable
             return true;
         } catch (\Exception $e) {
             Log::error("Error setting translation: {$e->getMessage()}");
+
             return false;
         }
     }
 
     /**
      * Get the translation for a model.
-     *
-     * @param  string  $modelClass
-     * @param  int     $id
-     * @param  string  $key
-     * @param  string  $locale
-     * @return string|null
      */
     public function getTranslate(string $modelClass, int $id, string $key, string $locale): ?string
     {
@@ -71,12 +59,6 @@ class FilamentModelTranslatable
 
     /**
      * Get the cache key for a translation.
-     *
-     * @param  string  $modelClass
-     * @param  int     $id
-     * @param  string  $key
-     * @param  string  $locale
-     * @return string
      */
     protected function getCacheKey(string $modelClass, int $id, string $key, string $locale): string
     {
@@ -85,12 +67,6 @@ class FilamentModelTranslatable
 
     /**
      * Clear the cache for a specific translation.
-     *
-     * @param  string  $modelClass
-     * @param  int     $id
-     * @param  string  $key
-     * @param  string  $locale
-     * @return void
      */
     protected function clearCache(string $modelClass, int $id, string $key, string $locale): void
     {
