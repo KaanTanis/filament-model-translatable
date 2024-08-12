@@ -2,12 +2,13 @@
 
 namespace KaanTanis\FilamentModelTranslatable;
 
-use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Field;
-use KaanTanis\FilamentModelTranslatable\Commands\FilamentModelTranslatableCommand;
-use KaanTanis\FilamentModelTranslatable\Facades\FilamentModelTranslatable;
+use Filament\Forms\Components\Repeater;
 use Spatie\LaravelPackageTools\Package;
+use Filament\Forms\Components\Actions\Action;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use KaanTanis\FilamentModelTranslatable\Facades\FilamentModelTranslatable;
+use KaanTanis\FilamentModelTranslatable\Commands\FilamentModelTranslatableCommand;
 
 class FilamentModelTranslatableServiceProvider extends PackageServiceProvider
 {
@@ -32,8 +33,13 @@ class FilamentModelTranslatableServiceProvider extends PackageServiceProvider
 
         // todo: fix repeater
         // todo: check fileupload, select and other fields
+        // todo: remove unnecessary translations    
 
-        Field::macro('translatable', function () {
+        Field::macro('translatable', function ($translatable = true) {
+            if (! $translatable) {
+                return $this;
+            }
+
             $component = clone $this;
 
             $locales = config('filament-model-translatable.supported_locales', ['en']);

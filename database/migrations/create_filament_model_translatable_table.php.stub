@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('model_type');
             $table->unsignedBigInteger('model_id');
             $table->string('key')->index();
-            $table->text('value');
+            $table->json('value');
             $table->string('value_type')->default('string');
             $table->timestamps();
         });

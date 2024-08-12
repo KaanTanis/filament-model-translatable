@@ -12,9 +12,18 @@ class FilamentModelTranslatable
     /**
      * Set the translation for a model.
      */
-    public function setTranslate(string $modelClass, int $id, string $key, string $value, string $locale): bool
+    public function setTranslate(string $modelClass, int $id, string $key, mixed $value, string $locale): void
     {
         try {
+            $value_type = match (gettype($value)) {
+                'array' => 'array',
+                'string' => 'string',
+                'integer' => 'integer',
+                'double' => 'float',
+                'boolean' => 'boolean',
+                default => 'string',
+            };
+
             ModelTranslatable::updateOrCreate(
                 [
                     'model_id' => $id,
@@ -24,23 +33,20 @@ class FilamentModelTranslatable
                 ],
                 [
                     'value' => $value,
+                    'value_type' => $value_type,
                 ]
             );
 
             $this->clearCache($modelClass, $id, $key, $locale);
-
-            return true;
         } catch (\Exception $e) {
-            Log::error("Error setting translation: {$e->getMessage()}");
-
-            return false;
+            throw new \Exception("Error setting translation: {$e->getMessage()}");
         }
     }
 
     /**
      * Get the translation for a model.
      */
-    public function getTranslate(string $modelClass, int $id, string $key, string $locale): ?string
+    public function getTranslate(string $modelClass, int $id, string $key, string $locale): mixed
     {
         return Cache::remember(
             $this->getCacheKey($modelClass, $id, $key, $locale),
