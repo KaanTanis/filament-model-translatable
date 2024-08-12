@@ -32,7 +32,6 @@ class FilamentModelTranslatableServiceProvider extends PackageServiceProvider
     {
         parent::boot();
 
-        // todo: fix repeater
         // todo: check fileupload, select and other fields
         // todo: remove unnecessary translations
 
@@ -58,6 +57,13 @@ class FilamentModelTranslatableServiceProvider extends PackageServiceProvider
                 });
 
                 return Action::make($locale)
+                    ->slideOver()
+                    ->color(function ($model, $record, $component) use ($locale) {
+                        $key = $component->getName();
+                        $translation = FilamentModelTranslatable::getTranslate($model, $record->id, $key, $locale);
+
+                        return $translation ? 'success' : 'danger';
+                    })
                     ->label(str($locale)->upper())
                     ->form([$localizedComponent])
                     ->hidden(function ($record, $component) {
