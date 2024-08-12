@@ -4,6 +4,7 @@ namespace KaanTanis\FilamentModelTranslatable;
 
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Field;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
 use KaanTanis\FilamentModelTranslatable\Commands\FilamentModelTranslatableCommand;
 use KaanTanis\FilamentModelTranslatable\Facades\FilamentModelTranslatable;
@@ -35,11 +36,7 @@ class FilamentModelTranslatableServiceProvider extends PackageServiceProvider
         // todo: check fileupload, select and other fields
         // todo: remove unnecessary translations
 
-        Field::macro('translatable', function ($translatable = true) {
-            if (! $translatable) {
-                return $this;
-            }
-
+        Field::macro('translatable', function () {
             $component = clone $this;
 
             $locales = config('filament-model-translatable.supported_locales', ['en']);
@@ -51,13 +48,29 @@ class FilamentModelTranslatableServiceProvider extends PackageServiceProvider
                     $key = $component->getName();
                     $translation = FilamentModelTranslatable::getTranslate($model, $record->id, $key, $locale);
 
-                    return $translation ?? $record->{$key};
+                    $value = $translation ?? $record->{$key};
+
+                    if ($component instanceof FileUpload) {
+                        $value = $component->isMultiple() ? $value : [$value];
+                    }
+
+                    return $value;
                 });
 
                 return Action::make($locale)
                     ->label(str($locale)->upper())
                     ->form([$localizedComponent])
-                    ->hidden(fn ($record) => ! $record)
+                    ->hidden(function ($record, $component) {
+                        if (is_null($record)) {
+                            return true;
+                        }
+
+                        $parentComponent = $component->getContainer()->getParentComponent();
+
+                        if ($parentComponent instanceof Repeater) {
+                            return true;
+                        }
+                    })
                     ->action(function ($model, $record, $data) use ($locale) {
                         $key = key($data);
                         $value = $data[$key];
