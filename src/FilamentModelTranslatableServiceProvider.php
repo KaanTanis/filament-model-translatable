@@ -46,7 +46,7 @@ class FilamentModelTranslatableServiceProvider extends PackageServiceProvider
 
             $actions = collect($locales)->map(function ($locale) use ($component) {
                 $localizedComponent = clone $component;
-                
+
                 $localizedComponent->formatStateUsing(function ($model, $record, $component) use ($locale) {
                     $key = $component->getName();
                     $translation = FilamentModelTranslatable::getTranslate($model, $record->id, $key, $locale);
@@ -57,7 +57,7 @@ class FilamentModelTranslatableServiceProvider extends PackageServiceProvider
                 return Action::make($locale)
                     ->label(str($locale)->upper())
                     ->form([$localizedComponent])
-                    ->hidden(fn($record) => !$record)
+                    ->hidden(fn ($record) => ! $record)
                     ->action(function ($model, $record, $data) use ($locale) {
                         $key = key($data);
                         $value = $data[$key];
