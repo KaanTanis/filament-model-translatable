@@ -4,7 +4,6 @@ namespace KaanTanis\FilamentModelTranslatable;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use KaanTanis\FilamentModelTranslatable\Models\ModelTranslatable;
 
 class FilamentModelTranslatable
