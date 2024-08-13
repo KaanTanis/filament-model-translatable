@@ -2,9 +2,8 @@
 
 namespace KaanTanis\FilamentModelTranslatable\Traits;
 
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 use KaanTanis\FilamentModelTranslatable\Models\ModelTranslatable as Model;
 
 trait ModelTranslatable
@@ -28,11 +27,11 @@ trait ModelTranslatable
 
         return parent::getAttribute($key);
     }
-    
+
     /**
      * Get the translation for a specific key.
      */
-    public function getTranslation(string $key, string $locale = null)
+    public function getTranslation(string $key, ?string $locale = null)
     {
         $locale ??= app()->getLocale();
         $modelClass = get_class($this);

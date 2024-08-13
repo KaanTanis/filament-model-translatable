@@ -44,10 +44,10 @@ class FilamentModelTranslatable
     public function getTranslate(string $modelClass, int $id, string $key, string $locale): mixed
     {
         $translation = ModelTranslatable::where('model_type', $modelClass)
-                ->where('model_id', $id)
-                ->where('key', $key)
-                ->where('locale', $locale)
-                ->first();
+            ->where('model_id', $id)
+            ->where('key', $key)
+            ->where('locale', $locale)
+            ->first();
 
         return $translation?->value;
     }
