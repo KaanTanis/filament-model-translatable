@@ -2,8 +2,6 @@
 
 namespace KaanTanis\FilamentModelTranslatable;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
 use KaanTanis\FilamentModelTranslatable\Models\ModelTranslatable;
 
 class FilamentModelTranslatable
@@ -35,8 +33,6 @@ class FilamentModelTranslatable
                     'value_type' => $value_type,
                 ]
             );
-
-            $this->clearCache($modelClass, $id, $key, $locale);
         } catch (\Exception $e) {
             throw new \Exception("Error setting translation: {$e->getMessage()}");
         }
@@ -47,34 +43,12 @@ class FilamentModelTranslatable
      */
     public function getTranslate(string $modelClass, int $id, string $key, string $locale): mixed
     {
-        return Cache::remember(
-            $this->getCacheKey($modelClass, $id, $key, $locale),
-            now()->addMinutes(config('filament-model-translatable.cache_time', 10)),
-            function () use ($modelClass, $id, $key, $locale) {
-                $translation = ModelTranslatable::where('model_type', $modelClass)
-                    ->where('model_id', $id)
-                    ->where('key', $key)
-                    ->where('locale', $locale)
-                    ->first();
+        $translation = ModelTranslatable::where('model_type', $modelClass)
+                ->where('model_id', $id)
+                ->where('key', $key)
+                ->where('locale', $locale)
+                ->first();
 
-                return $translation?->value;
-            }
-        );
-    }
-
-    /**
-     * Get the cache key for a translation.
-     */
-    protected function getCacheKey(string $modelClass, int $id, string $key, string $locale): string
-    {
-        return "translation.{$modelClass}.{$id}.{$key}.{$locale}";
-    }
-
-    /**
-     * Clear the cache for a specific translation.
-     */
-    protected function clearCache(string $modelClass, int $id, string $key, string $locale): void
-    {
-        Cache::forget($this->getCacheKey($modelClass, $id, $key, $locale));
+        return $translation?->value;
     }
 }

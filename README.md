@@ -1,4 +1,4 @@
-# This is my package filament-model-translatable
+# Filament Model Translatable
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/kaantanis/filament-model-translatable.svg?style=flat-square)](https://packagist.org/packages/kaantanis/filament-model-translatable)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/kaantanis/filament-model-translatable/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/kaantanis/filament-model-translatable/actions?query=workflow%3Arun-tests+branch%3Amain)
@@ -51,7 +51,12 @@ use KaanTanis\FilamentModelTranslatable\Traits\ModelTranslatable;
 
 class Post extends Model
 {
-    use ModelTranslatable; // add this line
+    use ModelTranslatable;
+
+    protected $translatable = [
+        'title',
+        'body',
+    ];
 }
 ```
 ```php
@@ -63,6 +68,8 @@ TextInput::make('title')
 // Get the value
 $model->title // It will return the value of the app()->getLocale()
 $model->getTranslation('title', 'tr') // It will return the value of the target locale
+
+// if the given locale does not exist from database, it will return the title of the model itself
 ```
 
 ## Testing

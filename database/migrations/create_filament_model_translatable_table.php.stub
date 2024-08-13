@@ -11,8 +11,8 @@ return new class extends Migration
         Schema::create('model_translatables', function (Blueprint $table) {
             $table->id();
             $table->string('locale')->index();
-            $table->string('model_type');
-            $table->unsignedBigInteger('model_id');
+            $table->string('model_type')->index();
+            $table->unsignedBigInteger('model_id')->index();
             $table->string('key')->index();
             $table->json('value');
             $table->string('value_type')->default('string');

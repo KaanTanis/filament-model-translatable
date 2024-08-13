@@ -33,8 +33,6 @@ class FilamentModelTranslatableServiceProvider extends PackageServiceProvider
         parent::boot();
 
         // todo: check fileupload, select and other fields
-        // todo: remove unnecessary translations
-
         Field::macro('translatable', function () {
             $component = clone $this;
 
@@ -47,7 +45,7 @@ class FilamentModelTranslatableServiceProvider extends PackageServiceProvider
                     $key = $component->getName();
                     $translation = FilamentModelTranslatable::getTranslate($model, $record->id, $key, $locale);
 
-                    $value = $translation ?? $record->{$key};
+                    $value = $translation ?? $record->getAttributes()[$key] ?? null;
 
                     if ($component instanceof FileUpload) {
                         $value = $component->isMultiple() ? $value : [$value];

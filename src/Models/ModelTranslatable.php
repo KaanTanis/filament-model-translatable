@@ -14,4 +14,9 @@ class ModelTranslatable extends Model
     protected $casts = [
         'value' => 'array',
     ];
+
+    public function translatable()
+    {
+        return $this->morphTo();
+    }
 }
