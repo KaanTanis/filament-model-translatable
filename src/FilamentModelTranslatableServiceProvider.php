@@ -2,14 +2,19 @@
 
 namespace KaanTanis\FilamentModelTranslatable;
 
-use Filament\Forms\Components\Actions\Action;
+use Illuminate\Support\Carbon;
 use Filament\Forms\Components\Field;
-use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
-use KaanTanis\FilamentModelTranslatable\Commands\FilamentModelTranslatableCommand;
-use KaanTanis\FilamentModelTranslatable\Facades\FilamentModelTranslatable;
 use Spatie\LaravelPackageTools\Package;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\DateTimePicker;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use KaanTanis\FilamentModelTranslatable\Facades\FilamentModelTranslatable;
+use KaanTanis\FilamentModelTranslatable\Commands\FilamentModelTranslatableCommand;
 
 class FilamentModelTranslatableServiceProvider extends PackageServiceProvider
 {
@@ -45,10 +50,14 @@ class FilamentModelTranslatableServiceProvider extends PackageServiceProvider
                     $key = $component->getName();
                     $translation = FilamentModelTranslatable::getTranslate($model, $record->id, $key, $locale);
 
-                    $value = $translation ?? $record->getAttributes()[$key] ?? null;
+                    $value = $translation ?? $record->getAttribute($key) ?? null;
 
                     if ($component instanceof FileUpload) {
                         $value = $component->isMultiple() ? $value : [$value];
+                    }
+
+                    if ($component instanceof Checkbox || $component instanceof Toggle) {
+                        $value = $value ? true : false;
                     }
 
                     return $value;
@@ -60,7 +69,7 @@ class FilamentModelTranslatableServiceProvider extends PackageServiceProvider
                         $key = $component->getName();
                         $translation = FilamentModelTranslatable::getTranslate($model, $record->id, $key, $locale);
 
-                        return $translation ? 'success' : 'danger';
+                        return is_null($translation) ? 'danger' : 'success';
                     })
                     ->label(str($locale)->upper())
                     ->form([$localizedComponent])

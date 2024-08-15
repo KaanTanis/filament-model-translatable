@@ -72,6 +72,25 @@ $model->getTranslation('title', 'tr') // It will return the value of the target 
 // if the given locale does not exist from database, it will return the title of the model itself
 ```
 
+## Important Notice
+When using the `translatable` method, the `->translatable()` method must be called the last. Otherwise, other methods will not work.
+
+When using Select component, be sure to use the `->options()` method after the `->translatable()` method.
+
+```php
+// This will all work
+TextInput::make('title')
+    ->required()
+    ->translatable()
+
+// This will only main component field required but other cloned translatable components will not be require
+// But still translatable
+TextInput::make('title')
+    ->translatable()
+    ->required()
+```
+We need new ideas for version 2.0.0. Please open a discussion for your ideas.
+
 ## Testing
 
 ```bash
