@@ -7,6 +7,9 @@
 
 Filament model translatable is a package that provides a trait to make your models translatable in Laravel Filament. The data is stored in a new table with the model's id, the field name, the language, and the value.
 
+![Screenshot](https://raw.githubusercontent.com/KaanTanis/filament-tab-translatable/main/art/resource.png)
+![Screenshot](https://raw.githubusercontent.com/KaanTanis/filament-tab-translatable/main/art/migration.png)
+
 ## Installation
 
 You can install the package via composer:
